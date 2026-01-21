@@ -3,6 +3,7 @@ package com.saif.fitness.userservice.controller;
 import com.saif.fitness.userservice.dto.UserRequestDto;
 import com.saif.fitness.userservice.dto.UserResponseDto;
 import com.saif.fitness.userservice.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/validate")
-    public ResponseEntity<Boolean> validateUser(@PathVariable String userId){
+    public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest){
+        System.out.println("incoming request: "+httpServletRequest.getRequestURI());
         return ResponseEntity.ok(userService.existsByUserId(userId));
     }
 }
