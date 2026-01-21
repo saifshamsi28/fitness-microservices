@@ -1,0 +1,18 @@
+# ===== IntelliJ / IDE =====
+.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+
+# ===== Maven / Java =====
+target/
+**/target/
+*.log
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Env =====
+.env

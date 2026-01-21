@@ -55,4 +55,8 @@ public class UserService {
                 .build();
 
     }
+
+    public Boolean existsByUserId(String userId) {
+        return userRepository.existsById(userId);
+    }
 }
