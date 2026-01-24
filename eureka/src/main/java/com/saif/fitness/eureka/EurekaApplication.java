@@ -1,4 +1,4 @@
-package com.saif.eureka;
+package com.saif.fitness.eureka;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

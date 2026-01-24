@@ -1,6 +1,6 @@
-package com.saif.aiservice.repository;
+package com.saif.fitness.aiservice.repository;
 
-import com.saif.aiservice.model.Recommendation;
+import com.saif.fitness.aiservice.model.Recommendation;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

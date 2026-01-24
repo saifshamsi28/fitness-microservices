@@ -1,7 +1,7 @@
-package com.saif.aiservice.service;
+package com.saif.fitness.aiservice.service;
 
-import com.saif.aiservice.model.Recommendation;
-import com.saif.aiservice.repository.RecommendationRepository;
+import com.saif.fitness.aiservice.model.Recommendation;
+import com.saif.fitness.aiservice.repository.RecommendationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

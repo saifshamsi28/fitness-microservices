@@ -1,6 +1,6 @@
-package com.saif.aiservice.model;
+package com.saif.fitness.aiservice.model;
 
-import com.saif.aiservice.model.enums.ActivityType;
+import com.saif.fitness.aiservice.model.enums.ActivityType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,7 +1,7 @@
-package com.saif.aiservice.controller;
+package com.saif.fitness.aiservice.controller;
 
-import com.saif.aiservice.model.Recommendation;
-import com.saif.aiservice.service.RecommendationService;
+import com.saif.fitness.aiservice.model.Recommendation;
+import com.saif.fitness.aiservice.service.RecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

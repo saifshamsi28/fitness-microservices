@@ -1,10 +1,10 @@
-package com.saif.aiservice;
+package com.saif.fitness.eureka;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AiserviceApplicationTests {
+class EurekaApplicationTests {
 
 	@Test
 	void contextLoads() {
