@@ -1,4 +1,4 @@
-package com.saif.aiservice.model.enums;
+package com.saif.fitness.aiservice.model.enums;
 
 public enum ActivityType {
     RUNNING,

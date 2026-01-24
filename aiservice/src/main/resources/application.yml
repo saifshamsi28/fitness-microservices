@@ -13,7 +13,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.saif.aiservice.model.Activity
+        spring.json.value.default.type: com.saif.fitness.aiservice.model.Activity
         spring.json.trusted.packages: "*"
 
 kafka:

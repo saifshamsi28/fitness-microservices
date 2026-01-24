@@ -1,4 +1,4 @@
-package com.saif.aiservice.model;
+package com.saif.fitness.aiservice.model;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.saif.aiservice.service;
+package com.saif.fitness.aiservice.service;
 
-import com.saif.aiservice.model.Activity;
+import com.saif.fitness.aiservice.model.Activity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
