@@ -2,6 +2,7 @@ package com.saif.fitness.activityservice.config;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
@@ -11,14 +12,20 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @EnableMongoAuditing
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+    @Value("${DB_URL}")
+    private String databaseUrl;
+
+    @Value("${DB_NAME}")
+    private String databaseName;
+
     @Override
     protected String getDatabaseName() {
-        return "aiactivityfitness";
+        return databaseName;
     }
 
     @Override
     @Bean
     public MongoClient mongoClient() {
-        return MongoClients.create("mongodb://localhost:27017");
+        return MongoClients.create(databaseUrl);
     }
 }
