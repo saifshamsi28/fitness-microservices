@@ -31,3 +31,8 @@ server:
   port: 8083
   servlet:
     context-path: /api/v1
+
+gemini:
+  api:
+    key: ${GEMINI_API_KEY}
+    url: ${GEMINI_API_URL}
