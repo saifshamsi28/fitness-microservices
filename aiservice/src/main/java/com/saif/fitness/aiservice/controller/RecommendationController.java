@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/recommendations")
+@RequestMapping("/api/recommendations")
 @RequiredArgsConstructor
 public class RecommendationController {
     private final RecommendationService recommendationService;

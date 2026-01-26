@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -18,6 +18,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponseDto> getUser(@PathVariable String userId){
+        System.err.println("fetching user with id: "+userId);
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
