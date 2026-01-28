@@ -41,7 +41,12 @@ public class ActivityService {
         activity=activityRepository.save(activity);
 
         try {
-            kafkaTemplate.send(topicName,activity.getUserId(),activity);
+            kafkaTemplate.send(topicName,activity.getUserId(),activity)
+                    .whenComplete((result, ex) -> {
+                        if (ex != null) {
+                            System.err.println("Kafka send failed: " + ex.getMessage());
+                        }
+                    });
         }catch (Exception e){
             e.printStackTrace();
         }
