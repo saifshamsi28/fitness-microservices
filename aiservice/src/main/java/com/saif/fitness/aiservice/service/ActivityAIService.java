@@ -73,26 +73,10 @@ public class ActivityAIService {
 
         }catch (Exception e){
             e.printStackTrace();
-            return generalRecommendation(activity);
+            return createFallbackRecommendation(activity);
         }
     }
 
-    private Recommendation generalRecommendation(Activity activity) {
-        return Recommendation.builder()
-                .activityId(activity.getId())
-                .userId(activity.getUserId())
-                .activityType(activity.getActivityType().toString())
-                .recommendation("Unable to generate detailed recommendations")
-                .improvements(Collections.singletonList("Continue with your daily routines"))
-                .suggestions(Collections.singletonList("Consider consulting a fitness consultant"))
-                .safety(Arrays.asList(
-                        "Always warm-up before exercise",
-                        "Stay hydrated",
-                        "Listen to your body"
-                ))
-                .createdAt(LocalDateTime.now())
-                .build();
-    }
 
     private List<String> extractSafetyGuidelines(JsonNode safetyNode) {
         List<String> safetyGuidelines =new ArrayList<>();
@@ -184,5 +168,22 @@ public class ActivityAIService {
                 activity.getCaloriesBurned(),
                 activity.getAdditionalMetrics()
         );
+    }
+
+    public Recommendation createFallbackRecommendation(Activity activity) {
+        return Recommendation.builder()
+                .activityId(activity.getId())
+                .userId(activity.getUserId())
+                .activityType(activity.getActivityType().toString())
+                .recommendation("Unable to generate detailed recommendations")
+                .improvements(Collections.singletonList("Continue with your daily routines"))
+                .suggestions(Collections.singletonList("Consider consulting a fitness consultant"))
+                .safety(Arrays.asList(
+                        "Always warm-up before exercise",
+                        "Stay hydrated",
+                        "Listen to your body"
+                ))
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 }
