@@ -16,16 +16,4 @@ public class GatewayApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
-
-//	@EventListener(ApplicationReadyEvent.class)
-//	public void printRoutes() {
-//		System.out.println("========================================");
-//		System.out.println("LOADED GATEWAY ROUTES:");
-//		System.out.println("========================================");
-//		routeLocator.getRoutes().subscribe(route ->
-//				System.out.println("Route ID: " + route.getId() +
-//						" | URI: " + route.getUri() +
-//						" | Predicate: " + route.getPredicate()));
-//		System.out.println("========================================");
-//	}
 }
