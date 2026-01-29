@@ -31,6 +31,6 @@ public class UserController {
     @GetMapping("/{userId}/validate")
     public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest){
         System.out.println("incoming request: "+httpServletRequest.getRequestURI());
-        return ResponseEntity.ok(userService.existsByUserId(userId));
+        return ResponseEntity.ok(userService.existsByKeYCloakUserId(userId));
     }
 }

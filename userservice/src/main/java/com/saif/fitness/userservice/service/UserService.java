@@ -16,15 +16,26 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserResponseDto register(UserRequestDto userRequest) {
+        User user=new User();
         if(userRepository.existsByEmail(userRequest.getEmail())){
-            throw new EmailAlreadyExistsException("Email already exists");
+            user=userRepository.findByEmail(userRequest.getEmail());
+            return UserResponseDto.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .password(user.getPassword())
+                    .keyCloakId(user.getKeycloakId())
+                    .createdAt(user.getCreatedAt())
+                    .updatedAt(user.getUpdatedAt())
+                    .build();
         }
 
-        User user=new User();
         user.setEmail(userRequest.getEmail());
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
         user.setPassword(userRequest.getPassword());
+        user.setKeycloakId(userRequest.getKeycloakId());
 
         user=userRepository.save(user);
 
@@ -56,7 +67,7 @@ public class UserService {
 
     }
 
-    public Boolean existsByUserId(String userId) {
-        return userRepository.existsById(userId);
+    public Boolean existsByKeYCloakUserId(String userId) {
+        return userRepository.existsByKeycloakId(userId);
     }
 }

@@ -1,4 +1,4 @@
-package com.saif.fitness.userservice.dto;
+package com.saif.fitness.gateway.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +12,7 @@ public class UserRequestDto {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6,message = "Password must have atleast 6 characters")
+    @Size(min = 6,message = "Password must have at least 6 characters")
     private String password;
 
     private String keycloakId;
