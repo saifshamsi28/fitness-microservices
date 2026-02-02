@@ -17,20 +17,20 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable String userId){
-        System.err.println("fetching user with id: "+userId);
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable String userId) {
+        System.err.println("fetching user with id: " + userId);
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.ok(userService.register(userRequestDto));
     }
 
     @GetMapping("/{userId}/validate")
-    public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest){
-        System.out.println("incoming request: "+httpServletRequest.getRequestURI());
+    public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest) {
+        System.out.println("incoming request: " + httpServletRequest.getRequestURI());
         return ResponseEntity.ok(userService.existsByKeYCloakUserId(userId));
     }
 }
