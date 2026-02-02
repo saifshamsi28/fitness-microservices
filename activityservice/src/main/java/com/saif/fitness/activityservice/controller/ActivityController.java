@@ -2,15 +2,12 @@ package com.saif.fitness.activityservice.controller;
 
 import com.saif.fitness.activityservice.dto.ActivityRequest;
 import com.saif.fitness.activityservice.dto.ActivityResponse;
-import com.saif.fitness.activityservice.models.Activity;
-import com.saif.fitness.activityservice.models.enums.ActivityType;
 import com.saif.fitness.activityservice.service.ActivityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -23,4 +20,16 @@ public class ActivityController {
     public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest activityRequest){
         return ResponseEntity.ok(activityService.trackActivity(activityRequest));
     }
+
+    @GetMapping
+    public ResponseEntity<List<ActivityResponse>> getActivities(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam String userId
+    ) {
+        return ResponseEntity.ok(
+                activityService.getActivities(page, size, userId)
+        );
+    }
+
 }

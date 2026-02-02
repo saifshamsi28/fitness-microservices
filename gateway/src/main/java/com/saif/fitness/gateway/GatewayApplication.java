@@ -10,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringBootApplication
 public class GatewayApplication {
 
-	@Autowired
-	private RouteLocator routeLocator;
-
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayApplication.class, args);
 	}
