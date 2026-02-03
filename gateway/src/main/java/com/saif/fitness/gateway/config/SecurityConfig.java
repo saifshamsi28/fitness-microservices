@@ -33,12 +33,7 @@ public class SecurityConfig {
     public ReactiveJwtDecoder reactiveJwtDecoder(
             @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri:}") String jwkSetUri) {
 
-        // If config server is not available (like during tests), use a default URI
-        String uriToUse = jwkSetUri.isEmpty()
-                ? "http://localhost:8181/realms/fitness-app/protocol/openid-connect/certs"
-                : jwkSetUri;
-
-        return NimbusReactiveJwtDecoder.withJwkSetUri(uriToUse).build();
+        return NimbusReactiveJwtDecoder.withJwkSetUri(jwkSetUri).build();
     }
 
 }
