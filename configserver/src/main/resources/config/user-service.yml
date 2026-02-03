@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${USER_DB_URL}
-    username: ${USER_DB_USERNAME}
-    password: ${USER_DB_PASSWORD}
+    url: ${FITNESS_USER_DB_URL}
+    username: ${FITNESS_USER_DB_USERNAME}
+    password: ${FITNESS_USER_DB_PASSWORD}
 
   jpa:
     hibernate:
@@ -16,6 +16,12 @@ eureka:
   instance:
     prefer-ip-address: true
     ip-address: 127.0.0.1
+keycloak:
+  server-url: ${KEYCLOAK_SERVER_URL}
+  realm: ${KEYCLOAK_REALM}
+  admin-client-id: ${KEYCLOAK_ADMIN_CLIENT_ID}
+  admin-username: ${KEYCLOAK_ADMIN_USERNAME}
+  admin-password: ${KEYCLOAK_ADMIN_PASSWORD}
 
 server:
-  port: 8081
+  port: 8086
