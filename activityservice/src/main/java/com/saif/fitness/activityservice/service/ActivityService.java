@@ -90,4 +90,12 @@ public class ActivityService {
                 .toList();
     }
 
+    public ActivityResponse getActivityById(String activityId) {
+        Activity activity = activityRepository.findById(activityId)
+                .orElseThrow(() -> new UserNotFoundException("Activity not found"));
+
+        return mapToResponse(activity);
+    }
+
+
 }
