@@ -6,14 +6,20 @@ import com.saif.fitness.activityservice.exception.UserNotFoundException;
 import com.saif.fitness.activityservice.models.Activity;
 import com.saif.fitness.activityservice.repository.ActivityRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ActivityService {
 
+    private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
     private final ActivityRepository activityRepository;
     private final UserValidationService userValidationService;
     private final KafkaTemplate<String, Activity> kafkaTemplate;
@@ -22,6 +28,8 @@ public class ActivityService {
     private String topicName;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
+
+        log.info("In ACTIVITY-SERVICE/ActivityService/trackActivity, request: {}",request);
 
         boolean isValid=userValidationService.validateUser(request.getUserId());
 
@@ -55,7 +63,8 @@ public class ActivityService {
     }
 
     private ActivityResponse mapToResponse(Activity activity){
-        return ActivityResponse.builder()
+
+        ActivityResponse response= ActivityResponse.builder()
                 .id(activity.getId())
                 .userId(activity.getUserId())
                 .activityType(activity.getActivityType())
@@ -66,5 +75,19 @@ public class ActivityService {
                 .createdAt(activity.getCreatedAt())
                 .updatedAt(activity.getUpdatedAt())
                 .build();
+        log.info("In ACTIVITY-SERVICE/ActivityService/mapToResponse, response: {}",response);
+        return response;
     }
+
+    public List<ActivityResponse> getActivities(int page, int size, String userId) {
+
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        return activityRepository
+                .findByUserId(userId, pageRequest)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
 }

@@ -3,3 +3,9 @@ spring:
     name: gateway-service
   config:
     import: optional:configserver:http://localhost:8888
+
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: TRACE
+#    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+#    reactor.netty.http.client: DEBUG

@@ -1,22 +1,32 @@
 spring:
-  data:
-    mongodb:
-      uri: ${USER_DB_URL}
-
   kafka:
     bootstrap-servers: localhost:9092
+
     consumer:
       group-id: activity-processor-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      max-poll-records: 1
+
+      key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+
       properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
+
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.saif.fitness.aiservice.model.Activity
         spring.json.trusted.packages: "*"
 
+        session.timeout.ms: 120000       # 2 minutes
+        max.poll.interval.ms: 300000     # 5 minutes
+        request.timeout.ms: 120000       # 2 minutes
+
 kafka:
   topic:
     name: activity-events
+
 eureka:
   client:
     serviceUrl:

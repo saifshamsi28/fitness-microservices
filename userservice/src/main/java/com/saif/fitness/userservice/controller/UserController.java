@@ -1,10 +1,8 @@
 package com.saif.fitness.userservice.controller;
 
-import com.saif.fitness.userservice.dto.UserRequestDto;
 import com.saif.fitness.userservice.dto.UserResponseDto;
 import com.saif.fitness.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +15,14 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponseDto> getUser(@PathVariable String userId){
-        System.err.println("fetching user with id: "+userId);
+    public ResponseEntity<UserResponseDto> getUser(@PathVariable String userId) {
+        System.err.println("fetching user with id: " + userId);
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
-
-    @PostMapping("/register")
-    public ResponseEntity<UserResponseDto> register(@Valid @RequestBody UserRequestDto userRequestDto){
-        return ResponseEntity.ok(userService.register(userRequestDto));
-    }
-
     @GetMapping("/{userId}/validate")
-    public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest){
-        System.out.println("incoming request: "+httpServletRequest.getRequestURI());
-        return ResponseEntity.ok(userService.existsByUserId(userId));
+    public ResponseEntity<Boolean> validateUser(@PathVariable String userId, HttpServletRequest httpServletRequest) {
+        System.out.println("incoming request: " + httpServletRequest.getRequestURI());
+        return ResponseEntity.ok(userService.existsByKeYCloakUserId(userId));
     }
 }
