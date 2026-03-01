@@ -38,6 +38,9 @@ public class KeycloakAdminService {
     @Value("${keycloak.app-client-id}")
     private String appClientId;
 
+    @Value("${keycloak.password-reset-redirect-uri}")
+    private String passwordResetRedirectUri;
+
     public String createUser(String email, String password, String firstName, String lastName) {
         log.info("Creating user in Keycloak: {}", email);
 
@@ -155,11 +158,8 @@ public class KeycloakAdminService {
             }
 
             String userId = users.get(0).getId();
-            // redirectUri must be a valid URI registered on the client; passing empty string
-            // lets Keycloak use the first registered redirect URI automatically
-            String redirectUri = keycloakServerUrl + "/realms/" + realm + "/account";
-            log.info("Calling executeActionsEmail: clientId={}, redirectUri={}, userId={}", appClientId, redirectUri, userId);
-            usersResource.get(userId).executeActionsEmail(appClientId, redirectUri, List.of("UPDATE_PASSWORD"));
+            log.info("Calling executeActionsEmail: clientId={}, redirectUri={}, userId={}", appClientId, passwordResetRedirectUri, userId);
+            usersResource.get(userId).executeActionsEmail(appClientId, passwordResetRedirectUri, List.of("UPDATE_PASSWORD"));
             log.info("Password reset email dispatched for user: {}", email);
 
         } catch (WebApplicationException e) {

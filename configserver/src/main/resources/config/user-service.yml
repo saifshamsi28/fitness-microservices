@@ -23,6 +23,7 @@ keycloak:
   admin-username: ${KEYCLOAK_ADMIN_USERNAME}
   admin-password: ${KEYCLOAK_ADMIN_PASSWORD}
   app-client-id: ${KEYCLOAK_APP_CLIENT_ID}
+  password-reset-redirect-uri: ${KEYCLOAK_PASSWORD_RESET_REDIRECT_URI:http://localhost:8181}
 
 server:
   port: 8086
