@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -113,5 +115,32 @@ public class AuthController {
     @GetMapping("/health")
     public Mono<ResponseEntity<String>> health() {
         return Mono.just(ResponseEntity.ok("Auth service is running"));
+    }
+
+    /**
+     * Triggers a Keycloak UPDATE_PASSWORD email.
+     * Always returns 200 so attackers cannot enumerate registered emails.
+     */
+    @PostMapping("/forgot-password")
+    public Mono<ResponseEntity<Map<String, Object>>> forgotPassword(
+            @RequestBody Map<String, String> body) {
+
+        String email = body != null ? body.get("email") : null;
+        if (email == null || email.isBlank()) {
+            return Mono.just(ResponseEntity.badRequest()
+                    .body(Map.of("success", false, "message", "Email is required")));
+        }
+
+        return Mono.fromRunnable(() -> keycloakAdminService.sendPasswordResetEmail(email.trim()))
+                .thenReturn(ResponseEntity.ok(
+                        Map.<String, Object>of("success", true,
+                                "message", "If that email is registered, a reset link has been sent.")))
+                .onErrorResume(e -> {
+                    log.error("forgot-password endpoint error: {}", e.getMessage());
+                    // Still return 200 to avoid enumeration
+                    return Mono.just(ResponseEntity.ok(
+                            Map.<String, Object>of("success", true,
+                                    "message", "If that email is registered, a reset link has been sent.")));
+                });
     }
 }

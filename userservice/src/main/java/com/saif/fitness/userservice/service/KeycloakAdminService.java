@@ -133,6 +133,33 @@ public class KeycloakAdminService {
         }
     }
 
+    /**
+     * Sends a Keycloak UPDATE_PASSWORD action email to the user with the given email.
+     * Searches by EMAIL field (not username) so users whose username ≠ email are found correctly.
+     * Silently succeeds even if no matching account is found (security best practice).
+     */
+    public void sendPasswordResetEmail(String email) {
+        try (Keycloak keycloak = getKeycloakInstance()) {
+            RealmResource realmResource = keycloak.realm(realm);
+            UsersResource usersResource = realmResource.users();
+
+            // Search by email field specifically (not username)
+            List<UserRepresentation> users = usersResource.searchByEmail(email, true);
+            if (users.isEmpty()) {
+                log.warn("Password reset requested for unregistered email: {}", email);
+                return; // silent — don't reveal whether email exists
+            }
+
+            String userId = users.get(0).getId();
+            usersResource.get(userId).executeActionsEmail(List.of("UPDATE_PASSWORD"));
+            log.info("Password reset email dispatched for user: {}", email);
+
+        } catch (Exception e) {
+            log.error("Failed to send password reset email for {}: {}", email, e.getMessage(), e);
+            throw new RuntimeException("Failed to send password reset email");
+        }
+    }
+
     public static class UserAlreadyExistsException extends RuntimeException {
         public UserAlreadyExistsException(String message) {
             super(message);
