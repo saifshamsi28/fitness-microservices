@@ -34,6 +34,9 @@ public class KeycloakAdminService {
     @Value("${keycloak.admin-password}")
     private String adminPassword;
 
+    @Value("${keycloak.app-client-id}")
+    private String appClientId;
+
     public String createUser(String email, String password, String firstName, String lastName) {
         log.info("Creating user in Keycloak: {}", email);
 
@@ -151,7 +154,7 @@ public class KeycloakAdminService {
             }
 
             String userId = users.get(0).getId();
-            usersResource.get(userId).executeActionsEmail(List.of("UPDATE_PASSWORD"));
+            usersResource.get(userId).executeActionsEmail(appClientId, null, List.of("UPDATE_PASSWORD"));
             log.info("Password reset email dispatched for user: {}", email);
 
         } catch (Exception e) {
