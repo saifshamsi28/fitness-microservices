@@ -1,5 +1,6 @@
 package com.saif.fitness.userservice.service;
 
+import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -154,9 +155,23 @@ public class KeycloakAdminService {
             }
 
             String userId = users.get(0).getId();
-            usersResource.get(userId).executeActionsEmail(appClientId, null, List.of("UPDATE_PASSWORD"));
+            // redirectUri must be a valid URI registered on the client; passing empty string
+            // lets Keycloak use the first registered redirect URI automatically
+            String redirectUri = keycloakServerUrl + "/realms/" + realm + "/account";
+            log.info("Calling executeActionsEmail: clientId={}, redirectUri={}, userId={}", appClientId, redirectUri, userId);
+            usersResource.get(userId).executeActionsEmail(appClientId, redirectUri, List.of("UPDATE_PASSWORD"));
             log.info("Password reset email dispatched for user: {}", email);
 
+        } catch (WebApplicationException e) {
+            // Extract actual Keycloak error response body for detailed diagnosis
+            String body = "<no body>";
+            try {
+                Response response = e.getResponse();
+                response.bufferEntity();
+                body = response.readEntity(String.class);
+            } catch (Exception ignored) {}
+            log.error("Keycloak executeActionsEmail failed for {} — HTTP {}: {}", email, e.getResponse().getStatus(), body);
+            throw new RuntimeException("Failed to send password reset email: " + body);
         } catch (Exception e) {
             log.error("Failed to send password reset email for {}: {}", email, e.getMessage(), e);
             throw new RuntimeException("Failed to send password reset email");
