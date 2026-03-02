@@ -21,4 +21,5 @@ public class UserRequestDto {
     private String firstName;
     @NotBlank(message = "Last name is required")
     private String lastName;
+    private String username;
 }
