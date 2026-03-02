@@ -5,6 +5,7 @@ FROM quay.io/keycloak/keycloak:26.5.2 AS builder
 ENV KC_DB=postgres
 ENV KC_HTTP_ENABLED=true
 ENV KC_HOSTNAME_STRICT=false
+ENV KC_HEALTH_ENABLED=true
 
 # Pre-build/augment Keycloak — this is the memory-heavy step, done once here
 RUN /opt/keycloak/bin/kc.sh build
