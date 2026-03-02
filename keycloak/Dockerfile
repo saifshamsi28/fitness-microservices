@@ -21,6 +21,5 @@ COPY fitness-app-realm.json /opt/keycloak/data/import/fitness-app-realm.json
 # Limit JVM heap so Render 512MB free tier doesn't OOM
 ENV JAVA_OPTS_APPEND="-Xms64m -Xmx380m"
 
-# start --optimized = skip re-augmentation at runtime (already done in builder stage)
-# KC_HTTP_ENABLED=true and KC_HOSTNAME_STRICT=false must be set as env vars in Render
-ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--import-realm"]
+# --http-host=0.0.0.0 required for Render — default binds to localhost only
+ENTRYPOINT ["/opt/keycloak/bin/kc.sh", "start", "--optimized", "--import-realm", "--http-host=0.0.0.0"]
