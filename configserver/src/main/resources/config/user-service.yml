@@ -9,13 +9,25 @@ spring:
       ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
-    ip-address: 127.0.0.1
+
 keycloak:
   server-url: ${KEYCLOAK_SERVER_URL}
   realm: ${KEYCLOAK_REALM}
@@ -25,5 +37,14 @@ keycloak:
   app-client-id: ${KEYCLOAK_APP_CLIENT_ID}
   password-reset-redirect-uri: ${KEYCLOAK_PASSWORD_RESET_REDIRECT_URI:http://localhost:8181}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
 server:
-  port: 8086
+  port: ${PORT:8086}

@@ -1,27 +1,28 @@
 spring:
+  data:
+    mongodb:
+      uri: ${MONGO_AI_URI}
   kafka:
-    bootstrap-servers: localhost:9092
-
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       group-id: activity-processor-group
       enable-auto-commit: false
       auto-offset-reset: earliest
       max-poll-records: 1
-
       key-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
-
       properties:
+        security.protocol: SASL_SSL
+        sasl.mechanism: SCRAM-SHA-256
+        sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="${KAFKA_SASL_USERNAME}" password="${KAFKA_SASL_PASSWORD}";
         spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringDeserializer
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
-
         spring.json.use.type.headers: false
         spring.json.value.default.type: com.saif.fitness.aiservice.model.Activity
         spring.json.trusted.packages: "*"
-
-        session.timeout.ms: 120000       # 2 minutes
-        max.poll.interval.ms: 300000     # 5 minutes
-        request.timeout.ms: 120000       # 2 minutes
+        session.timeout.ms: 120000
+        max.poll.interval.ms: 300000
+        request.timeout.ms: 120000
 
 kafka:
   topic:
@@ -30,13 +31,21 @@ kafka:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka/}
   instance:
     prefer-ip-address: true
-    ip-address: 127.0.0.1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
 
 server:
-  port: 8083
+  port: ${PORT:8083}
 
 openrouter:
   api:
