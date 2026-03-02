@@ -21,6 +21,7 @@ public class SecurityConfig {
 
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/api/auth/**").permitAll()
+                        .pathMatchers("/ping").permitAll()
 
                         // Everything else needs authentication
                         .anyExchange().authenticated()

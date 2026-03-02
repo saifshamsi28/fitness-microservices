@@ -31,6 +31,11 @@ public class KeycloakUserSyncFilter implements WebFilter {
             return chain.filter(exchange);
         }
 
+        if(path.startsWith("/ping")){
+            log.info("Skipping KeycloakUserSyncFilter for {}", path);
+            return chain.filter(exchange);
+        }
+
         log.info("Incoming request: {}",exchange.getRequest().getURI());
         log.info("calling user sync filter");
         String userId=exchange.getRequest().getHeaders().getFirst("X-User-ID");
