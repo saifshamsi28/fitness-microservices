@@ -62,7 +62,7 @@ public class KafkaConsumerConfig {
 
         // Deserializers — instantiated directly (avoids deprecated JsonDeserializer class-config approach)
         JacksonJsonDeserializer<Activity> valueDeserializer =
-                new JacksonJsonDeserializer<>(Activity.class, new ObjectMapper());
+                new JacksonJsonDeserializer<>(Activity.class);
         valueDeserializer.setUseTypeHeaders(false);
         valueDeserializer.addTrustedPackages("*");
 
