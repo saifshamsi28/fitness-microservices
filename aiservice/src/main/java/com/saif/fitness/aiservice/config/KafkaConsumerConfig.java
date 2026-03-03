@@ -1,6 +1,7 @@
 package com.saif.fitness.aiservice.config;
 
 import com.saif.fitness.aiservice.model.Activity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +12,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JacksonJsonDeserializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,15 +50,6 @@ public class KafkaConsumerConfig {
         props.put("max.poll.interval.ms", 300000);
         props.put("request.timeout.ms", 120000);
 
-        // Deserializers
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,   ErrorHandlingDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
-        props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS,   StringDeserializer.class);
-        props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
-        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, Activity.class.getName());
-        props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
-
         // SASL/SSL — only added when credentials are present (production on Render)
         if (!saslUsername.isBlank()) {
             String jaasConfig = String.format(
@@ -68,7 +60,16 @@ public class KafkaConsumerConfig {
             props.put("sasl.jaas.config", jaasConfig);
         }
 
-        return new DefaultKafkaConsumerFactory<>(props);
+        // Deserializers — instantiated directly (avoids deprecated JsonDeserializer class-config approach)
+        JacksonJsonDeserializer<Activity> valueDeserializer =
+                new JacksonJsonDeserializer<>(Activity.class, new ObjectMapper());
+        valueDeserializer.setUseTypeHeaders(false);
+        valueDeserializer.addTrustedPackages("*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new ErrorHandlingDeserializer<>(valueDeserializer));
     }
 
     @Bean
