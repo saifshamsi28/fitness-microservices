@@ -1,7 +1,4 @@
 spring:
-  data:
-    mongodb:
-      uri: ${MONGO_ACTIVITY_URI}
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     producer:

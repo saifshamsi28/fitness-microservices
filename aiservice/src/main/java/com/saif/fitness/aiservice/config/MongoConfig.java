@@ -11,16 +11,16 @@ import org.springframework.data.mongodb.config.EnableMongoAuditing;
 @EnableMongoAuditing
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
-    private static final String DEFAULT_URI = "mongodb://localhost:27017/ai_db";
-    private static final String DEFAULT_DB  = "ai_db";
+    private static final String DEFAULT_URI = "mongodb://localhost:27017/activity_db";
+    private static final String DEFAULT_DB  = "activity_db";
 
     /**
-     * Reads MONGO_AI_URI directly from the OS environment, completely
+     * Reads MONGO_ACTIVITY_URI directly from the OS environment, completely
      * bypassing Spring's property resolution chain (which would otherwise pick up
      * an empty/unresolved value forwarded by the config server on Railway).
      */
     private String resolveUri() {
-        String uri = System.getenv("MONGO_AI_URI");
+        String uri = System.getenv("MONGO_ACTIVITY_URI");
         return (uri != null && !uri.isBlank()) ? uri : DEFAULT_URI;
     }
 
@@ -32,7 +32,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     protected String getDatabaseName() {
         try {
-            String uri = System.getenv("MONGO_AI_URI");
+            String uri = System.getenv("MONGO_ACTIVITY_URI");
             if (uri != null && !uri.isBlank()) {
                 String db = new ConnectionString(uri).getDatabase();
                 if (db != null && !db.isBlank()) return db;
