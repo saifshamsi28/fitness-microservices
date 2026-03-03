@@ -11,7 +11,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -43,14 +42,19 @@ public class ActivityMessageListener {
             return;
         }
 
-        // 2. Call AI (Reactive)
+        // 2. Generate recommendation and only commit offset AFTER successful save.
+        // Previously, acknowledge() was in doFinally (fires on error too) — that caused
+        // offsets to be committed even when MongoDB was down, losing those activities
+        // permanently. Now: ack only happens inside doOnNext (success path).
         activityAIService.generateRecommendation(activity)
-                .doOnNext(recommendationRepository::save)
-                .doOnError(e -> log.error("Error processing AI", e))
-                .doFinally(signal -> {
+                .doOnNext(rec -> {
+                    recommendationRepository.save(rec);
                     acknowledgment.acknowledge();
-                    log.info("Committed offset for {}", activity.getId());
+                    log.info("Recommendation saved and offset committed for activity {}", activity.getId());
                 })
+                .doOnError(e -> log.error(
+                        "Failed to process activity {} — offset NOT committed, will retry on next restart",
+                        activity.getId(), e))
                 .subscribe();
     }
 }
